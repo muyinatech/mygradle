@@ -1,8 +1,11 @@
 subprojects {
+    apply plugin: 'maven'
     apply plugin: 'java'
 
     repositories {
-        mavenCentral()
+        maven {
+            url "${nexusUrl}/content/groups/public"
+        }
     }
 
     dependencies {
@@ -12,9 +15,22 @@ subprojects {
     }
 
     sourceCompatibility = 1.8
-    version = '1.0'
+    version = '1.0-SNAPSHOT'
 
     jar {
         manifest.attributes provider: 'gradle'
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: "${nexusUrl}/content/repositories/releases") {
+                    authentication(userName: nexusUsername, password: nexusPassword)
+                }
+                snapshotRepository(url: "${nexusUrl}/content/repositories/snapshots") {
+                    authentication(userName: nexusUsername, password: nexusPassword)
+                }
+            }
+        }
     }
 }
