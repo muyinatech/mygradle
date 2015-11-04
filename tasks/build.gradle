@@ -18,7 +18,7 @@ task intro(dependsOn: hello) << {
 }
 
 
-// create taskX which depends on taskY declared after
+// create taskX which depends on taskY declared after, hence the task name is in single quotes
 task taskX(dependsOn: 'taskY') << {
     println 'taskX'
 }
@@ -57,10 +57,12 @@ greeting << {
 // Add a property to a task
 task myTask {
     ext.myProperty = "myValue"
+	ext.anotherProperty = "myValue2"
 }
 
 task printTaskProperties << {
     println myTask.myProperty
+    println myTask.anotherProperty	
 }
 
 task distribution << {
@@ -72,7 +74,7 @@ task release(dependsOn: 'distribution') << {
 }
 
 gradle.taskGraph.whenReady {taskGraph ->
-    if (taskGraph.hasTask(release)) {
+    if (taskGraph.hasTask(release)) { // if release is in the task graph
         version = '1.0'
     } else {
         version = '1.0-SNAPSHOT'

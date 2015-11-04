@@ -1,0 +1,38 @@
+apply plugin: 'java'
+
+repositories {
+	mavenLocal()
+    mavenCentral()
+	
+	maven { // configure a remote Maven repository
+        url "http://repo.mycompany.com/maven2"
+    }
+}
+
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    testCompile group: 'junit', name: 'junit', version: '4.+' // junit >= 4.0
+}
+
+sourceCompatibility = 1.8
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart',
+                   'Implementation-Version': version
+    }
+}
+
+
+// apply plugin: 'maven' // required to publish to maven repository, it will generate a pom.xml for the project
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+	   
+        mavenDeployer {  // configure a remote maven repository to deploy the artifacts to
+            repository(url: "file://localhost/tmp/myRepo/")
+        }
+    }
+}
